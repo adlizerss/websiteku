@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Windows 7 Portfolio - Profil Saya</title>
+  <style>
+    /* ============================================================
+       RESET & ROOT VARIABLES (Windows 7 Aero Palette)
+       ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    :root {
+      --aero-blue: rgba(45, 125, 210, 0.45);
+      --aero-border: rgba(255, 255, 255, 0.65);
+      --aero-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 0 10px rgba(0, 100, 200, 0.25);
+      --aero-drop-shadow: 0 12px 30px rgba(0, 20, 50, 0.5), 0 0 15px rgba(30, 120, 220, 0.4);
+      --taskbar-bg: linear-gradient(180deg, rgba(30, 80, 140, 0.75) 0%, rgba(10, 30, 60, 0.85) 50%, rgba(15, 45, 90, 0.9) 100%);
+      --win-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      font-family: var(--win-font);
+      height: 100vh;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 30%, #1e69b8 0%, #0c3866 55%, #051933 100%);
+      background-size: cover;
+      color: #1e293b;
+      position: relative;
+    }
+
+    /* Windows 7 Subtle Light Waves on Wallpaper */
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 80% 20%, rgba(135, 206, 250, 0.35) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(70, 130, 230, 0.25) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       DESKTOP & ICONS
+       ============================================================ */
+    .desktop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 44px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 16px;
+      z-index: 1;
+    }
+
+    .desktop-icon {
+      width: 76px;
+      padding: 6px;
+      border-radius: 4px;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+
+    .desktop-icon:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.45);
+      box-shadow: 0 0 10px rgba(120, 200, 255, 0.4);
+    }
+
+    .desktop-icon svg {
+      width: 42px;
+      height: 42px;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.4));
+    }
+
+    .desktop-icon span {
+      font-size: 11.5px;
+      color: #ffffff;
+      text-shadow: 0 1px 3px #000, 0 0 6px rgba(0, 0, 0, 0.85);
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    /* ============================================================
+       AERO GLASS WINDOW SYSTEM
+       ============================================================ */
+    .window {
+      position: absolute;
+      min-width: 340px;
+      min-height: 220px;
+      background: var(--aero-blue);
+      backdrop-filter: blur(14px) saturate(180%);
+      -webkit-backdrop-filter: blur(14px) saturate(180%);
+      border: 1px solid var(--aero-border);
+      border-radius: 8px 8px 5px 5px;
+      box-shadow: var(--aero-drop-shadow), var(--aero-inner-shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .window.minimized {
+      display: none !important;
+    }
+
+    .window.maximized {
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: calc(100vh - 44px) !important;
+      border-radius: 0;
+    }
+
+    /* Aero Glass Highlight Sheen on Top */
+    .window::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 32px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.1) 60%, transparent 100%);
+      pointer-events: none;
+    }
+
+    /* Window Header / Title Bar */
+    .window-header {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      cursor: move;
+      position: relative;
+      z-index: 2;
+    }
+
+    .window-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(0, 180, 255, 0.9), 0 1px 2px #000;
+      letter-spacing: 0.3px;
+    }
+
+    .window-title svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .window-controls {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      cursor: default;
+    }
+
+    .win-btn {
+      width: 28px;
+      height: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 3px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(180,210,240,0.3) 50%, rgba(120,170,220,0.4) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+      transition: 0.15s;
+    }
+
+    .win-btn:hover {
+      background: linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(200,230,255,0.6) 100%);
+      box-shadow: 0 0 6px rgba(255,255,255,0.8);
+    }
+
+    .win-btn.close {
+      width: 44px;
+      background: linear-gradient(180deg, rgba(240, 140, 140, 0.5) 0%, rgba(210, 60, 60, 0.6) 50%, rgba(170, 20, 20, 0.7) 100%);
+    }
+
+    .win-btn.close:hover {
+      background: linear-gradient(180deg, rgba(255, 100, 100, 0.9) 0%, rgba(220, 20, 20, 0.95) 100%);
+      box-shadow: 0 0 8px rgba(255, 80, 80, 0.9);
+    }
+
+    .win-btn svg {
+      width: 10px;
+      height: 10px;
+      fill: #ffffff;
+      filter: drop-shadow(0 1px 1px rgba(0,0,0,0.6));
+    }
+
+    /* Window Body Canvas */
+    .window-body {
+      flex: 1;
+      margin: 0 4px 4px 4px;
+      background: #ffffff;
+      border-radius: 3px;
+      border: 1px solid rgba(0, 0, 0, 0.35);
+      padding: 18px;
+      overflow-y: auto;
+      user-select: text;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       PROFILE PICTURE FRAME (Aero Metallic Style)
+       ============================================================ */
+    .profile-card {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .aero-photo-frame {
+      position: relative;
+      width: 130px;
+      height: 145px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #e8f4fc 0%, #b8d4ee 50%, #89b3db 100%);
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid #7da2ce;
+      box-shadow: 0 4px 12px rgba(0, 40, 90, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 0 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .aero-photo-frame .photo-inner {
+      width: 100%;
+      height: 100%;
+      background: #c3d9ef;
+      border-radius: 3px;
+      overflow: hidden;
+      border: 1px solid #5a7d9e;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .aero-photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Glossy Sheen Overlay on Photo */
+    .aero-photo-frame .photo-inner::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.05) 100%);
+      pointer-events: none;
+    }
+
+    .profile-info h2 {
+      font-size: 18px;
+      color: #103867;
+      margin-bottom: 2px;
+      font-weight: 700;
+    }
+
+    .profile-info .subtitle {
+      font-size: 12px;
+      color: #2b6cb0;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .system-rating-box {
+      background: #f1f6fb;
+      border: 1px solid #bcd4eb;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-top: 10px;
+      font-size: 12px;
+    }
+
+    /* Project Cards & Skills */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .project-card {
+      border: 1px solid #c2d8ee;
+      background: linear-gradient(180deg, #ffffff 0%, #f4f8fc 100%);
+      padding: 10px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    .project-card h4 {
+      color: #1a4f8b;
+      margin-bottom: 4px;
+    }
+
+    .project-card p {
+      font-size: 11.5px;
+      color: #475569;
+    }
+
+    .skill-bar {
+      margin: 8px 0;
+    }
+
+    .skill-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .bar-track {
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(180deg, #6ec0ff 0%, #1e87e5 50%, #1565c0 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    /* ============================================================
+       SUPERBAR / TASKBAR
+       ============================================================ */
+    .taskbar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 44px;
+      background: var(--taskbar-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px;
+      z-index: 999;
+    }
+
+    .taskbar-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      height: 100%;
+    }
+
+    /* Windows 7 Iconic Start Orb */
+    .start-orb {
+      width: 48px;
+      height: 48px;
+      margin-top: -6px;
+      background: radial-gradient(circle at 50% 35%, #5eb4ff 0%, #1d72cd 50%, #0c3e7a 100%);
+      border: 2px solid rgba(255, 255, 255, 0.7);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 12px rgba(45, 145, 255, 0.8), inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -3px 5px rgba(0,0,0,0.5);
+      transition: filter 0.2s, transform 0.1s;
+    }
+
+    .start-orb:hover {
+      filter: brightness(1.2) drop-shadow(0 0 10px #70c4ff);
+    }
+
+    .start-orb:active {
+      transform: scale(0.96);
+    }
+
+    .start-orb svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Taskbar Items / Superbar */
+    .taskbar-tasks {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: 8px;
+      height: 100%;
+    }
+
+    .task-item {
+      height: 34px;
+      padding: 0 10px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #fff;
+      font-size: 12px;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      transition: 0.15s;
+    }
+
+    .task-item.active {
+      background: rgba(255, 255, 255, 0.32);
+      border-color: rgba(255, 255, 255, 0.7);
+      box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.6), 0 0 8px rgba(100, 180, 255, 0.5);
+    }
+
+    .task-item:hover {
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    .task-item svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* System Tray (Clock & Show Desktop) */
+    .system-tray {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      gap: 10px;
+      padding-right: 4px;
+      font-size: 11px;
+      color: #fff;
+    }
+
+    .tray-clock {
+      text-align: right;
+      line-height: 1.2;
+      cursor: default;
+      text-shadow: 0 1px 2px #000;
+      padding: 0 6px;
+    }
+
+    .show-desktop-btn {
+      width: 14px;
+      height: 38px;
+      border-left: 1px solid rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      border-radius: 0 3px 3px 0;
+      transition: background 0.15s;
+    }
+
+    .show-desktop-btn:hover {
+      background: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DESKTOP ICONS -->
+  <main class="desktop">
+    <div class="desktop-icon" onclick="openWindow('win-about')">
+      <svg viewBox="0 0 48 48">
+        <path fill="#ffd043" d="M40 12H22l-4-4H8c-2.2 0-4 1.8-4 4v24c0 2.2 1.8 4 4 4h32c2.2 0 4-1.8 4-4V16c0-2.2-1.8-4-4-4z"/>
+        <path fill="#42a5f5" d="M24 20a5 5 0 100 10 5 5 0 000-10zm-8 16c0-3.5 4-5 8-5s8 1.5 8 5H16z"/>
+      </svg>
+      <span>Profil Saya</span>
+    </div>
+
+    <div class="desktop-icon" onclick="openWindow('win-skills')">
+      <svg viewBox="0 0 48 48">
+        <path fill="#29b6f6" d="M38 6H10c-2.2 0-4 1.8-4 4v28c0 2.2 1.8 4 4 4h28c2.2 0 4-1.8 4-4V10c0-2.2-1.8-4-4-4z"/>
+        <path fill="#ffffff" d="M16 16l-6 8 6 8M32 16l6 8-6 8M26 14l-4 20" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span>Skills.sys</span>
+    </div>
+
+    <div class="desktop-icon" onclick="openWindow('win-projects')">
+      <svg viewBox="0 0 48 48">
+        <path fill="#ffa000" d="M40 12H24l-4-4H8C5.8 8 4 9.8 4 12v24c0 2.2 1.8 4 4 4h32c2.2 0 4-1.8 4-4V16c0-2.2-1.8-4-4-4z"/>
+        <path fill="#ffca28" d="M40 16H8c-2.2 0-4 1.8-4 4v16c0 2.2 1.8 4 4 4h32c2.2 0 4-1.8 4-4V20c0-2.2-1.8-4-4-4z"/>
+      </svg>
+      <span>Projects</span>
+    </div>
+  </main>
+
+  <!-- WINDOW 1: PROFIL & BIO (ABOUT) -->
+  <div class="window" id="win-about" style="top: 60px; left: 120px; width: 560px; z-index: 10;">
+    <div class="window-header" onmousedown="startDrag(event, 'win-about')">
+      <div class="window-title">
+        <svg viewBox="0 0 24 24" fill="#60a5fa"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+        <span>Profil Saya - System Information</span>
+      </div>
+      <div class="window-controls">
+        <button class="win-btn" onclick="minimizeWindow('win-about')" title="Minimize">
+          <svg viewBox="0 0 10 10"><path d="M1 8h8v1H1z"/></svg>
+        </button>
+        <button class="win-btn" onclick="toggleMaximize('win-about')" title="Maximize">
+          <svg viewBox="0 0 10 10"><path d="M1 1h8v8H1V1zm1 2v5h6V3H2z"/></svg>
+        </button>
+        <button class="win-btn close" onclick="closeWindow('win-about')" title="Close">
+          <svg viewBox="0 0 10 10"><path d="M1 1l8 8m0-8L1 9" stroke="#fff" stroke-width="1.8"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="window-body">
+      <div class="profile-card">
+        <!-- FRAME FOTO PROFIL AERO METALLIC -->
+        <div class="aero-photo-frame">
+          <div class="photo-inner">
+            <!-- Ganti URL src foto di bawah dengan foto Anda -->
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" alt="Foto Profil" />
+          </div>
+        </div>
+
+        <div class="profile-info">
+          <h2>Nama Anda, S.Kom</h2>
+          <span class="subtitle">Frontend & Web Developer</span>
+          <p>Halo! Saya adalah seorang web developer yang berfokus membangun antarmuka web modern, interaktif, dan performan dengan fondasi HTML5, CSS3, dan JavaScript.</p>
+          <div class="system-rating-box">
+            <strong>Windows Experience Index:</strong> 7.9 ★★★★★<br>
+            <span style="color:#64748b; font-size:11px;">Status: Tersedia untuk proyek Web & Freelance.</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="color:#1e4b85; font-size:13px; border-bottom:1px solid #cbd5e1; padding-bottom:4px; margin-bottom:8px;">Ringkasan Profil</h3>
+      <p style="color:#334155; font-size:12px; margin-bottom: 6px;">
+        • Berpengalaman dalam merancang UI/UX responsif serta manipulasi DOM kompleks.<br>
+        • Terbiasa menulis kode vanilla yang bersih tanpa ketergantungan library berlebih.<br>
+        • Tertarik pada eksplorasi estetika antarmuka skeuomorphic, glassmorphism, dan modern design.
+      </p>
+    </div>
+  </div>
+
+  <!-- WINDOW 2: SKILLS.SYS -->
+  <div class="window" id="win-skills" style="top: 100px; left: 240px; width: 440px; z-index: 9; display: none;">
+    <div class="window-header" onmousedown="startDrag(event, 'win-skills')">
+      <div class="window-title">
+        <svg viewBox="0 0 24 24" fill="#38bdf8"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        <span>Skills.sys - Tech Stack</span>
+      </div>
+      <div class="window-controls">
+        <button class="win-btn" onclick="minimizeWindow('win-skills')"><svg viewBox="0 0 10 10"><path d="M1 8h8v1H1z"/></svg></button>
+        <button class="win-btn" onclick="toggleMaximize('win-skills')"><svg viewBox="0 0 10 10"><path d="M1 1h8v8H1V1zm1 2v5h6V3H2z"/></svg></button>
+        <button class="win-btn close" onclick="closeWindow('win-skills')"><svg viewBox="0 0 10 10"><path d="M1 1l8 8m0-8L1 9" stroke="#fff" stroke-width="1.8"/></svg></button>
+      </div>
+    </div>
+    <div class="window-body">
+      <h3 style="color:#103867; margin-bottom: 12px;">Kemampuan Teknis</h3>
+      
+      <div class="skill-bar">
+        <div class="skill-meta"><span>HTML5 Semantik & a11y</span><span>95%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width: 95%;"></div></div>
+      </div>
+
+      <div class="skill-bar">
+        <div class="skill-meta"><span>CSS3 (Grid, Flexbox, Animations)</span><span>90%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width: 90%;"></div></div>
+      </div>
+
+      <div class="skill-bar">
+        <div class="skill-meta"><span>Modern JavaScript (ES6+, DOM)</span><span>85%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width: 85%;"></div></div>
+      </div>
+
+      <div class="skill-bar">
+        <div class="skill-meta"><span>Responsive & Mobile-First Design</span><span>90%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width: 90%;"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WINDOW 3: PROJECTS -->
+  <div class="window" id="win-projects" style="top: 140px; left: 320px; width: 480px; z-index: 8; display: none;">
+    <div class="window-header" onmousedown="startDrag(event, 'win-projects')">
+      <div class="window-title">
+        <svg viewBox="0 0 24 24" fill="#fbbf24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+        <span>C:\Users\Portfolio\Projects</span>
+      </div>
+      <div class="window-controls">
+        <button class="win-btn" onclick="minimizeWindow('win-projects')"><svg viewBox="0 0 10 10"><path d="M1 8h8v1H1z"/></svg></button>
+        <button class="win-btn" onclick="toggleMaximize('win-projects')"><svg viewBox="0 0 10 10"><path d="M1 1h8v8H1V1zm1 2v5h6V3H2z"/></svg></button>
+        <button class="win-btn close" onclick="closeWindow('win-projects')"><svg viewBox="0 0 10 10"><path d="M1 1l8 8m0-8L1 9" stroke="#fff" stroke-width="1.8"/></svg></button>
+      </div>
+    </div>
+    <div class="window-body">
+      <h3 style="color:#103867;">Daftar Karya & Portofolio</h3>
+      <div class="project-grid">
+        <div class="project-card">
+          <h4>Windows 7 Portfolio</h4>
+          <p>Website portofolio interaktif berbasis Vanilla JS dengan window management & st
